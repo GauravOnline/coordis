@@ -1,0 +1,54 @@
+[project]
+name = "coordis"
+version = "0.1.0"
+description = "Coordis App"
+authors = [
+    {name = "Daniel",email = "46549393+DanielM39@users.noreply.github.com"}
+]
+readme = "README.md"
+packages = [
+    { include = "coordis", from = "src" }
+]
+
+
+requires-python = ">=3.11"
+dependencies = [
+    "discord-py (>=2.5.2,<3.0.0)",
+    "sqlmodel (>=0.0.24,<0.0.25)"
+]
+
+[tool.poetry]
+
+[tool.poetry.group.dev.dependencies]
+ruff = "^0.11.6"
+mypy = "^1.15.0"
+pre-commit = "^4.2.0"
+rich = "^14.0.0"
+ipython = "^9.1.0"
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.ruff]
+line-length = 88
+target-version = "py311"
+
+[tool.ruff.lint]
+extend-select = ["I"]
+ignore = ["E402"]
+
+[tool.ruff.lint.per-file-ignores]
+"__init__.py" = ["F401", "F403"]
+
+[tool.ruff.lint.isort]
+case-sensitive = true
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+skip-magic-trailing-comma = false
+line-ending = "auto"
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
