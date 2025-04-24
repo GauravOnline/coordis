@@ -2,7 +2,9 @@ from typing import Literal
 
 from sqlmodel import SQLModel, create_engine
 
-SQLITE_FILE_NAME: str = "database.db"  # Should change to load from config/env when set
+from coordis.db.tables import *  # noqa: F401, F403
+
+SQLITE_FILE_NAME: str = "database.db3"  # Should change to load from config/env when set
 SQLITE_URL: str = f"sqlite:///{SQLITE_FILE_NAME}"
 
 SQL_SERVER_URL: str = "SOME_SQL_SERVER_URL"

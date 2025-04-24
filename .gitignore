@@ -4,3 +4,6 @@
 # Poetry
 dist/
 .venv/
+
+# Other
+*.db3

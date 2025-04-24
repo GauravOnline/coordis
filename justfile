@@ -35,6 +35,10 @@ lint: format
 	@just ruff check
 	@just mypy
 
+# Run the program
+run *args:
+	@poetry run coordis {{ args }}
+
 # Build project
 build: _setup_poetry
 	@poetry build
