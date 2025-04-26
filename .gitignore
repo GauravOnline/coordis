@@ -1,0 +1,48 @@
+# Python virtual environment
+.venv/
+venv/
+ENV/
+
+# Environment variables
+.env
+
+# Python bytecode
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Distribution / packaging
+dist/
+build/
+*.egg-info/
+
+# Log files
+*.log
+
+# IDE specific files
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS specific files
+.DS_Store
+Thumbs.db
+
+# Secret files
+*_token.txt
+*_secret.txt
+*credentials*
+
+# Local database files
+*.db
+*.sqlite
+*.sqlite3
+
+# Test coverage
+htmlcov/
+.tox/
+.coverage
+.coverage.*
+coverage.xml
+*.cover
