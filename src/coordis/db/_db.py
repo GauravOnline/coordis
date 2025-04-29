@@ -15,7 +15,7 @@ SQL_TYPE: Literal["sqlite", "server"] = (
 
 ECHO_SQL: bool = True  # Should change to load from config/env when set
 
-engine = create_engine(
+ENGINE = create_engine(
     SQLITE_URL if SQL_TYPE == "sqlite" else SQL_SERVER_URL, echo=ECHO_SQL
 )
-SQLModel.metadata.create_all(engine, checkfirst=True)
+SQLModel.metadata.create_all(ENGINE, checkfirst=True)

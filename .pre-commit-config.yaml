@@ -34,11 +34,3 @@ repos:
         args: ["check", "."]
         language: system
         types: [python]
-
-    -   id: mypy
-        name: mypy
-        description: run mypy to typecheck code
-        entry: poetry run mypy
-        args: []
-        language: system
-        types: [python]

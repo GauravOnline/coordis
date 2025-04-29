@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 from sqlmodel import SQLModel
 
-from coordis.db import engine  # noqa: F401
+from coordis.db import ENGINE  # noqa: F401
 
 try:
     from rich import print
