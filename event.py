@@ -7,7 +7,7 @@ class Event(SQLModel, table=True):
     #class_name: str
     #class_id: str
     date_due: Optional[str] = None
-    date_assigned: int
+    date_assigned: str
 
 class EventList(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)

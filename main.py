@@ -8,6 +8,8 @@ from random import randint
 import os
 from sqlmodel import Field, Session, SQLModel, create_engine, select
 from event import Event, EventList
+import datetime
+from sqlalchemy.exc import SQLAlchemyError
 
 # --- Initial Setup ---
 load_dotenv()
@@ -16,18 +18,20 @@ handler = logging.FileHandler(filename = 'discord.log',encoding='utf-8', mode='w
 intents = discord.Intents.all()
 intents.message_content = True
 intents.members = True
-engine = create_engine("sqlite:///database.db")
+sqlite_file_name = "database.db"
+engine = create_engine(f"sqlite:///{sqlite_file_name}")
+SQLModel.metadata.drop_all(engine) # Drop all data, REMOVE FOR PRODUCTION!
 SQLModel.metadata.create_all(engine)
 bot = commands.Bot(command_prefix='?', intents=intents)
 
 # assign_1 = Assignment(id = 1, name= "assignment 1", date_due= "05/15/25", date_assign= "04/20/2025", wght= 25)
 # student_1 = Student(id = 19, f_name="Desmond", l_name="farrel", age=15, grade=10, disc_name="deadman_2")
 
-with Session(engine) as session:
-    
-    # session.add(assign_1)
-    # session.add(student_1)
-    session.commit()
+# with Session(engine) as session:
+#
+#     # session.add(assign_1)
+#     # session.add(student_1)
+#     session.commit()
 
 
 # ------- Event Listeners --------
@@ -70,14 +74,29 @@ async def on_message(message):
         else:
             event_name = msglist[1]
             date_due = msglist[2]
-            event = Event(event_name=event_name, date_due=date_due)
-            with Session(engine) as sessioninner:
-                sessioninner.add(event)
-                sessioninner.commit()
-            await message.channel.send("Event: " + event_name + " due at: " + date_due + " added.")
+            now = datetime.datetime.now()
+            date_now = now.strftime("%m/%d/%Y")
+            event = Event(event_name=event_name, date_due=date_due, date_assigned=date_now)
+
+            try:
+                with Session(engine) as sessioninner:
+                    sessioninner.add(event)
+                    print("Adding Event: ", event)
+                    sessioninner.commit()
+                await message.channel.send("Event: " + event_name + " due at: " + date_due + " added.")
+            except SQLAlchemyError as e:
+                print("An error occurred:", e)
             return
+    elif msglist[0] == '!listevents':
+        events = select_events()
+        for event in events:
+            await message.channel.send(event.event_name + " due at: " + event.date_due + " assigned at: " + event.date_assigned)
 
-
+def select_events():
+    with Session(engine) as session:
+        statement = select(Event)
+        events = session.exec(statement).all()
+    return events
 
 @bot.event
 async def send_message(message: Message, user_message: str, username) -> None:
@@ -126,5 +145,5 @@ def main() -> None:
     bot.run(Token, log_handler=handler, log_level=logging.DEBUG)
 
 
-    if __name__ == '__main__':
-        main()
+if __name__ == '__main__':
+    main()
