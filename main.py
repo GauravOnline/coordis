@@ -65,8 +65,9 @@ async def on_message(message):
         return
 
     if msglist[0] == '!help':
-        #TODO Send Usage Information
+        await message.channel.send(HELP_MESSAGE)
         return
+    # Event creation command
     elif msglist[0] == '!event':
         # Events need a name and due date, for now due date is mandatory
         if len(msglist) < 3:
@@ -88,11 +89,13 @@ async def on_message(message):
             except SQLAlchemyError as e:
                 print("An error occurred:", e)
             return
+    # Event listing command
     elif msglist[0] == '!listevents':
         events = select_events()
         for event in events:
             await message.channel.send(event.event_name + " due at: " + event.date_due + " assigned at: " + event.date_assigned)
 
+# Select all events and return them as a list of Event objects.
 def select_events():
     with Session(engine) as session:
         statement = select(Event)
@@ -110,8 +113,15 @@ async def send_message(message: Message, user_message: str, username) -> None:
         print(f'message: {user_message}')
     except Exception as e:
         print(e)
-        return 
-    
+        return
+
+# Help message as a separate variable
+HELP_MESSAGE = (
+    "Hello! I'm your friendly bot. Here are some commands you can use:\n"
+    "`!help` - Displays this message with usage information.\n"
+    "`!event` - Sends a fun reminder about upcoming events!.\n"
+    "Enjoy using the bot!"
+)
 
 def get_response(user_input: str, username) -> str:
     lowered: str = user_input.lower()
