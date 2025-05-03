@@ -44,8 +44,7 @@ def setup_bot():
     async def help_command(ctx, role=None):
         await help_cmd.execute(ctx, role)
 
-        # Add help command to bot
-
+    # Add ping command to bot
     @bot.command(name='ping')
     async def ping_command(ctx, role=None):
         await ping_cmd.execute(ctx, role)
