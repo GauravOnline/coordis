@@ -1,4 +1,5 @@
 # --- Imports ---
+import os
 import discord
 from discord import Message, Intents, Client
 from discord.ext import commands
