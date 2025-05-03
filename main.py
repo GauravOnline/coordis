@@ -119,7 +119,7 @@ async def send_message(message: Message, user_message: str, username) -> None:
 HELP_MESSAGE = (
     "Hello! I'm your friendly bot. Here are some commands you can use:\n"
     "`!help` - Displays this message with usage information.\n"
-    "`!event` - Sends a fun reminder about upcoming events!.\n"
+    "`!event <event name> <due date>` - Sends a fun reminder about upcoming events!.\n"
     "Enjoy using the bot!"
 )
 
