@@ -64,6 +64,7 @@ class HelpCommand(Command):
         )
 
         for cmd in commands:
+            print(cmd.name)
             help_text = cmd.get_help_text()
             command_name, description = help_text.split(" - ", 1)
             embed.add_field(name=command_name, value=description, inline=False)
