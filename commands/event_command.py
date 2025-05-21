@@ -22,14 +22,17 @@ class EventCommand(Command):
 
             if action == "add":
                 print(args)
-                if len(args) < 2:
-                    await ctx.send("Usage: !event add <name> <due-date>")
+                if len(args) < 2 or len(args) > 4:
+                    await ctx.send("Usage: !event add <name> <due-date> <info(optional)>")
                     return
                 name = args[1]
                 try:
                     assigned = datetime.now()
                     due = datetime.fromisoformat(args[2])
-                    event = service.create_event(name, assigned, due)
+                    info = "No extra event info provided."
+                    if len(args) > 3:
+                        info = args[3]
+                    event = service.create_event(name, assigned, due, info)
                     await ctx.send(f"✅ Event '{event.event_name}' added.")
                 except ValueError:
                     await ctx.send("❌ Invalid date format. Use ISO 8601 (e.g. 2024-05-07T15:30).")
@@ -40,7 +43,7 @@ class EventCommand(Command):
                     await ctx.send("No events found.")
                 else:
                     msg = "\n".join(
-                        f"[{e.id}] {e.event_name} - assigned: {e.date_assigned}, due: {e.date_due}" for e in events
+                        f"[{e.id}] {e.event_name} - assigned: {e.date_assigned}, due: {e.date_due} \nInfo: {e.event_info}" for e in events
                     )
                     await ctx.send(f"📅 Events:\n{msg}")
 
@@ -61,4 +64,4 @@ class EventCommand(Command):
         Returns:
             str: Help text describing the command usage
         """
-        return f"!{self.name} [add|list|delete] <name> <due-date> - {self.description}"
+        return f"!{self.name} [add|list|delete] <name> <due-date> <info(optional)> - {self.description}"
