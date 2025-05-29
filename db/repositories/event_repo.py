@@ -1,6 +1,9 @@
-from sqlmodel import Session, select
-from db.models.event import Event
 from typing import List, Optional
+
+from sqlmodel import Session, select
+
+from db.models.event import Event
+
 
 class EventRepository:
     def __init__(self, session: Session):

@@ -3,7 +3,9 @@ Homework Command Implementation
 
 A command that adds homework items and responds with a fun message.
 """
+
 import discord
+
 from commands.base import Command
 
 
@@ -14,7 +16,7 @@ class HomeworkCommand(Command):
         super().__init__(
             name="hw",
             description="Adds a new homework item",
-            roles=["student", "teacher"]  # Available to students and teachers
+            roles=["student", "teacher"],  # Available to students and teachers
         )
 
     async def execute(self, ctx, *args):
@@ -26,7 +28,9 @@ class HomeworkCommand(Command):
             *args: The homework description
         """
         if args[0] is None:
-            await ctx.send("You didn't provide a homework description! Usage: `!homework [description]`")
+            await ctx.send(
+                "You didn't provide a homework description! Usage: `!homework [description]`"
+            )
             return
 
         # Join all arguments into a single homework description
@@ -42,7 +46,7 @@ class HomeworkCommand(Command):
         embed = discord.Embed(
             title="📚 New Homework Item",
             description=homework_description,
-            color=discord.Color.red()  # Red for urgency!
+            color=discord.Color.red(),  # Red for urgency!
         )
 
         # Add footer with author info

@@ -1,7 +1,8 @@
 import pytest
-from core.registry import CommandRegistry
-from commands.help_command import HelpCommand
+
 from commands.event_command import EventCommand
+from commands.help_command import HelpCommand
+from core.registry import CommandRegistry
 
 
 @pytest.fixture(autouse=True)
@@ -25,7 +26,9 @@ async def test_help_command_no_role(mock_ctx):
     """
     help_command = HelpCommand()
     await help_command.execute(mock_ctx, role="")
-    mock_ctx.send.assert_called_with("Please specify your role: `!help student` or `!help teacher`")
+    mock_ctx.send.assert_called_with(
+        "Please specify your role: `!help student` or `!help teacher`"
+    )
 
 
 @pytest.mark.asyncio
@@ -38,7 +41,9 @@ async def test_help_command_invalid_role(mock_ctx):
     """
     help_command = HelpCommand()
     await help_command.execute(mock_ctx, role="admin")
-    mock_ctx.send.assert_called_with("Unknown role. Please use `!help student` or `!help teacher`")
+    mock_ctx.send.assert_called_with(
+        "Unknown role. Please use `!help student` or `!help teacher`"
+    )
 
 
 @pytest.mark.asyncio

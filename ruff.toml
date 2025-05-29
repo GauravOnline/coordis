@@ -1,0 +1,34 @@
+exclude = [
+    ".git",
+    ".mypy_cache",
+    ".venv",
+    ".vscode",
+    "__pypackages__",
+    "build",
+    "dist",
+    "site-packages",
+    "venv"
+]
+
+line-length = 88
+indent-width = 4
+target-version = "py311"
+
+[lint]
+extend-select = ["I"]
+ignore = ["E402"]
+
+[lint.per-file-ignores]
+"__init__.py" = ["F401", "F403"]
+
+[lint.isort]
+case-sensitive = true
+
+[format]
+quote-style = "double"
+indent-style = "space"
+skip-magic-trailing-comma = false
+line-ending = "lf"
+
+[lint.pydocstyle]
+convention = "google"

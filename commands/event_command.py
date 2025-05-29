@@ -1,13 +1,17 @@
-from commands.base import Command
-from services.event_service import EventService
-from db.base import get_session
 from datetime import datetime
+
+from commands.base import Command
+from db.base import get_session
+from services.event_service import EventService
 
 
 class EventCommand(Command):
     def __init__(self):
-        super().__init__(name="event", description="Manage events",
-                         roles=["all", "student", "teacher"])
+        super().__init__(
+            name="event",
+            description="Manage events",
+            roles=["all", "student", "teacher"],
+        )
 
     async def execute(self, ctx, *args):
         if not args:
@@ -23,7 +27,9 @@ class EventCommand(Command):
             if action == "add":
                 print(args)
                 if len(args) < 2 or len(args) > 4:
-                    await ctx.send("Usage: !event add <name> <due-date> <info(optional)>")
+                    await ctx.send(
+                        "Usage: !event add <name> <due-date> <info(optional)>"
+                    )
                     return
                 name = args[1]
                 try:
@@ -35,7 +41,9 @@ class EventCommand(Command):
                     event = service.create_event(name, assigned, due, info)
                     await ctx.send(f"✅ Event '{event.event_name}' added.")
                 except ValueError:
-                    await ctx.send("❌ Invalid date format. Use ISO 8601 (e.g. 2024-05-07T15:30).")
+                    await ctx.send(
+                        "❌ Invalid date format. Use ISO 8601 (e.g. 2024-05-07T15:30)."
+                    )
 
             elif action == "list":
                 events = service.list_events()
@@ -43,7 +51,8 @@ class EventCommand(Command):
                     await ctx.send("No events found.")
                 else:
                     msg = "\n".join(
-                        f"[{e.id}] {e.event_name} - assigned: {e.date_assigned}, due: {e.date_due} \nInfo: {e.event_info}" for e in events
+                        f"[{e.id}] {e.event_name} - assigned: {e.date_assigned}, due: {e.date_due} \nInfo: {e.event_info}"
+                        for e in events
                     )
                     await ctx.send(f"📅 Events:\n{msg}")
 

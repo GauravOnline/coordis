@@ -3,7 +3,9 @@ Ping Command Implementation
 
 A simple command that responds with "Pong!" and the bot's latency.
 """
+
 import discord
+
 from commands.base import Command
 
 
@@ -14,7 +16,7 @@ class PingCommand(Command):
         super().__init__(
             name="ping",
             description="Check the bot's response time",
-            roles=["all", "student", "teacher"]  # Available to all roles
+            roles=["all", "student", "teacher"],  # Available to all roles
         )
 
     async def execute(self, ctx, *args):
@@ -32,15 +34,11 @@ class PingCommand(Command):
         embed = discord.Embed(
             title="🏓 Pong!",
             description=f"Bot latency: {latency}ms",
-            color=discord.Color.green()
+            color=discord.Color.green(),
         )
 
         # Add additional info to the embed
-        embed.add_field(
-            name="Status",
-            value="✅ Bot is running normally",
-            inline=False
-        )
+        embed.add_field(name="Status", value="✅ Bot is running normally", inline=False)
 
         await ctx.send(embed=embed)
 

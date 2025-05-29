@@ -1,6 +1,8 @@
-import pytest
 import re
 from datetime import datetime
+
+import pytest
+
 from commands.event_command import EventCommand
 from db.models.event import Event
 
@@ -64,7 +66,9 @@ async def test_event_command_add_invalid_date(mock_ctx):
     """
     event_command = EventCommand()
     await event_command.execute(mock_ctx, ["add", "TestEvent", "beautiful-day"])
-    mock_ctx.send.assert_called_with("❌ Invalid date format. Use ISO 8601 (e.g. 2024-05-07T15:30).")
+    mock_ctx.send.assert_called_with(
+        "❌ Invalid date format. Use ISO 8601 (e.g. 2024-05-07T15:30)."
+    )
 
 
 @pytest.mark.asyncio

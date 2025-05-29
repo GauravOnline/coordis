@@ -3,7 +3,9 @@ Help Command Implementation
 
 Provides a help command that displays available commands based on user roles.
 """
+
 import discord
+
 from commands.base import Command
 from core.registry import CommandRegistry
 
@@ -15,7 +17,7 @@ class HelpCommand(Command):
         super().__init__(
             name="help",
             description="Displays available commands",
-            roles=["all", "student", "teacher"]
+            roles=["all", "student", "teacher"],
         )
 
     async def execute(self, ctx, role=None):
@@ -31,12 +33,16 @@ class HelpCommand(Command):
         print("inside the help command")
 
         if not role:
-            await ctx.send("Please specify your role: `!help student` or `!help teacher`")
+            await ctx.send(
+                "Please specify your role: `!help student` or `!help teacher`"
+            )
             return
 
         role = role.lower()
         if role not in ["student", "teacher"]:
-            await ctx.send("Unknown role. Please use `!help student` or `!help teacher`")
+            await ctx.send(
+                "Unknown role. Please use `!help student` or `!help teacher`"
+            )
             return
 
         # Get commands for the specified role
@@ -60,7 +66,7 @@ class HelpCommand(Command):
         embed = discord.Embed(
             title=f"📚 {role.capitalize()} Commands",
             description="Here are the commands available to you:",
-            color=discord.Color.blue()
+            color=discord.Color.blue(),
         )
 
         for cmd in commands:
