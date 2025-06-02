@@ -57,6 +57,8 @@ async def test_help_command_valid_roles(mock_ctx, role):
     help_command = HelpCommand()
     await help_command.execute(mock_ctx, role=role)
     embed = mock_ctx.send.call_args[1]["embed"]
+
+    # get expected embed from help_ui
     commands = CommandRegistry().get_commands_by_role(role)
     expected_embed = help_ui.help_embed(commands, role)
 
