@@ -2,6 +2,8 @@ import pytest
 from core.registry import CommandRegistry
 from commands.help_command import HelpCommand
 from commands.event_command import EventCommand
+from commands.ping_command import PingCommand
+from ui import help_ui
 
 
 @pytest.fixture(autouse=True)
@@ -13,6 +15,7 @@ def setup_registry():
     registry.commands.clear()
     registry.register_command(HelpCommand())
     registry.register_command(EventCommand())
+    registry.register_command(PingCommand())
 
 
 @pytest.mark.asyncio
@@ -25,7 +28,7 @@ async def test_help_command_no_role(mock_ctx):
     """
     help_command = HelpCommand()
     await help_command.execute(mock_ctx, role="")
-    mock_ctx.send.assert_called_with("Please specify your role: `!help student` or `!help teacher`")
+    mock_ctx.send.assert_called_with(help_ui.prompt_for_role())
 
 
 @pytest.mark.asyncio
@@ -38,7 +41,7 @@ async def test_help_command_invalid_role(mock_ctx):
     """
     help_command = HelpCommand()
     await help_command.execute(mock_ctx, role="admin")
-    mock_ctx.send.assert_called_with("Unknown role. Please use `!help student` or `!help teacher`")
+    mock_ctx.send.assert_called_with(help_ui.unknown_role_message())
 
 
 @pytest.mark.asyncio
@@ -54,11 +57,15 @@ async def test_help_command_valid_roles(mock_ctx, role):
     help_command = HelpCommand()
     await help_command.execute(mock_ctx, role=role)
     embed = mock_ctx.send.call_args[1]["embed"]
-    actual_commands = {field.name: field.value for field in embed.fields}
+    commands = CommandRegistry().get_commands_by_role(role)
+    expected_embed = help_ui.help_embed(commands, role)
 
-    expected_commands = {
-        "!help [role]": "Displays available commands",
-        "!event [add|list|delete] <name> <due-date>": "Manage events",
-    }
+    # compare embed fields
+    assert embed.title == expected_embed.title
+    assert embed.description == expected_embed.description
+    assert len(embed.fields) == len(expected_embed.fields)
 
-    assert actual_commands == expected_commands
+    # compare command fields
+    for actual_field, expected_field in zip(embed.fields, expected_embed.fields):
+        assert actual_field.name == expected_field.name
+        assert actual_field.value == expected_field.value

@@ -23,7 +23,7 @@ class EventCommand(Command):
 
             if action == "add":
                 if len(args) < 3 or len(args) > 4:
-                    await ctx.send("Usage: !event add <name> <due-date> <info(optional)>")
+                    await ctx.send(event_ui.add_usage_message())
                     return
                 name = args[1]
                 try:

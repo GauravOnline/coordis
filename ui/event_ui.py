@@ -6,6 +6,10 @@ def invalid_date_message():
     return "❌ Invalid date format. Use ISO 8601 (e.g. 2024-05-07T15:30)."
 
 
+def add_usage_message():
+    return "Usage: !event add <name> <due-date> <info(optional)>"
+
+
 def event_added_message(event):
     return f"✅ Event '{event.event_name}' added."
 
