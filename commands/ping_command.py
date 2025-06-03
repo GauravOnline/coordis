@@ -18,7 +18,7 @@ class PingCommand(Command):
         print("inside the ping command")
 
         embed = ping_ui.ping_response(latency)
-        await ctx.send(embed=embed)
+        await ctx.send(embed=embed, delete_after=5)
 
     def get_help_text(self):
         return f"!{self.name} - {self.description}"

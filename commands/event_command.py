@@ -12,7 +12,7 @@ class EventCommand(Command):
 
     async def execute(self, ctx, *args):
         if not args:
-            await ctx.send(event_ui.usage_message())
+            await ctx.send(event_ui.usage_message(), delete_after=10)
             return
 
         args = args[0]
@@ -23,7 +23,7 @@ class EventCommand(Command):
 
             if action == "add":
                 if len(args) < 3 or len(args) > 4:
-                    await ctx.send(event_ui.add_usage_message())
+                    await ctx.send(event_ui.add_usage_message(), delete_after=10)
                     return
                 name = args[1]
                 try:
@@ -31,23 +31,26 @@ class EventCommand(Command):
                     due = datetime.fromisoformat(args[2])
                     info = args[3] if len(args) > 3 else "No extra event info provided."
                     event = service.create_event(name, assigned, due, info)
-                    await ctx.send(event_ui.event_added_message(event))
+                    await ctx.send(event_ui.event_added_message(event), delete_after=5)
                 except ValueError:
-                    await ctx.send(event_ui.invalid_date_message())
+                    await ctx.send(event_ui.invalid_date_message(), delete_after=10)
 
             elif action == "list":
                 events = service.list_events()
-                await ctx.send(event_ui.no_events_message() if not events else event_ui.events_list_message(events))
+                if not events:
+                    await ctx.send(event_ui.no_events_message(), delete_after=5)
+                else:
+                    await ctx.send(event_ui.events_list_message(events))
 
             elif action == "delete":
                 if len(args) < 2 or not args[1].isdigit():
-                    await ctx.send(event_ui.delete_usage_message())
+                    await ctx.send(event_ui.delete_usage_message(), delete_after=10)
                     return
                 deleted = service.delete_event(int(args[1]))
-                await ctx.send(event_ui.delete_result_message(deleted))
+                await ctx.send(event_ui.delete_result_message(deleted), delete_after=5)
 
             else:
-                await ctx.send(event_ui.unknown_action_message())
+                await ctx.send(event_ui.unknown_action_message(), delete_after=10)
 
     def get_help_text(self):
         return f"!{self.name} [add|list|delete] <name> <due-date> <info(optional)> - {self.description}"

@@ -17,12 +17,12 @@ class HelpCommand(Command):
         registry = CommandRegistry()
 
         if not role:
-            await ctx.send(help_ui.prompt_for_role())
+            await ctx.send(help_ui.prompt_for_role(), delete_after=10)
             return
 
         role = role.lower()
         if role not in ["student", "teacher"]:
-            await ctx.send(help_ui.unknown_role_message())
+            await ctx.send(help_ui.unknown_role_message(), delete_after=10)
             return
 
         commands = registry.get_commands_by_role(role)
