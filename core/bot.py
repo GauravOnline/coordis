@@ -27,10 +27,10 @@ def setup_bot():
     with open("config.txt") as f:
         for line in f:
             print(line)
-            if line.casefold() == "default_alarm".casefold():
-                default_alarm = line
-            elif line.casefold() == "default_channel".casefold():
-                default_channel = line
+            if line.casefold().startswith("default_alarm".casefold()):
+                default_alarm = int(line.split("=", 1)[1])
+            elif line.casefold().startswith("default_channel".casefold()):
+                default_channel = line.split("=", 1)[1].rstrip()
 
     # Set up intents
     intents = discord.Intents.default()
