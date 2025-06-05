@@ -3,6 +3,8 @@ import re
 from datetime import datetime
 from commands.event_command import EventCommand
 from db.models.event import Event
+from ui import event_ui
+from types import SimpleNamespace
 
 
 @pytest.mark.asyncio
@@ -16,10 +18,11 @@ async def test_event_command_complete_usage(mock_ctx):
     event_command = EventCommand()
     event_name = "Midterm"
     due_time = datetime.now().isoformat()
+    mock_event = SimpleNamespace(event_name=event_name)
 
     # add event
     await event_command.execute(mock_ctx, ["add", event_name, due_time])
-    mock_ctx.send.assert_called_with(f"✅ Event '{event_name}' added.")
+    mock_ctx.send.assert_called_with(event_ui.event_added_message(mock_event))
 
     # list events
     await event_command.execute(mock_ctx, ["list"])
@@ -34,11 +37,11 @@ async def test_event_command_complete_usage(mock_ctx):
 
     # delete event
     await event_command.execute(mock_ctx, ["delete", str(event_id)])
-    mock_ctx.send.assert_called_with("🗑️ Event deleted.")
+    mock_ctx.send.assert_called_with(event_ui.delete_result_message(deleted=True))
 
     # confirm deletion
     await event_command.execute(mock_ctx, ["list"])
-    assert "No events found" in mock_ctx.send.call_args[0][0]
+    assert event_ui.no_events_message() in mock_ctx.send.call_args[0][0]
 
 
 @pytest.mark.asyncio
@@ -51,7 +54,7 @@ async def test_event_command_add_missing_args(mock_ctx):
     """
     event_command = EventCommand()
     await event_command.execute(mock_ctx, ["add"])
-    mock_ctx.send.assert_called_with("Usage: !event add <name> <due-date>")
+    mock_ctx.send.assert_called_with(event_ui.add_usage_message())
 
 
 @pytest.mark.asyncio
@@ -64,7 +67,7 @@ async def test_event_command_add_invalid_date(mock_ctx):
     """
     event_command = EventCommand()
     await event_command.execute(mock_ctx, ["add", "TestEvent", "beautiful-day"])
-    mock_ctx.send.assert_called_with("❌ Invalid date format. Use ISO 8601 (e.g. 2024-05-07T15:30).")
+    mock_ctx.send.assert_called_with(event_ui.invalid_date_message())
 
 
 @pytest.mark.asyncio
@@ -77,7 +80,7 @@ async def test_event_command_delete_missing_id(mock_ctx):
     """
     event_command = EventCommand()
     await event_command.execute(mock_ctx, ["delete"])
-    mock_ctx.send.assert_called_with("Usage: !event delete <id>")
+    mock_ctx.send.assert_called_with(event_ui.delete_usage_message())
 
 
 @pytest.mark.asyncio
@@ -90,7 +93,7 @@ async def test_event_command_delete_non_integer_id(mock_ctx):
     """
     event_command = EventCommand()
     await event_command.execute(mock_ctx, ["delete", "latest-event"])
-    mock_ctx.send.assert_called_with("Usage: !event delete <id>")
+    mock_ctx.send.assert_called_with(event_ui.delete_usage_message())
 
 
 @pytest.mark.asyncio
@@ -103,4 +106,4 @@ async def test_event_command_unknown_action(mock_ctx):
     """
     event_command = EventCommand()
     await event_command.execute(mock_ctx, ["do-something"])
-    mock_ctx.send.assert_called_with("Unknown action. Use add, list, or delete.")
+    mock_ctx.send.assert_called_with(event_ui.unknown_action_message())

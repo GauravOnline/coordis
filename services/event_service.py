@@ -8,11 +8,12 @@ class EventService:
     def __init__(self, session):
         self.repo = EventRepository(session)
 
-    def create_event(self, event_name: str, date_assigned: datetime, date_due: Optional[datetime] = None) -> Event:
+    def create_event(self, event_name: str, date_assigned: datetime, date_due: Optional[datetime] = None, event_info: Optional[str] = None) -> Event:
         event = Event(
             event_name=event_name,
             date_assigned=date_assigned,
-            date_due=date_due
+            date_due=date_due,
+            event_info=event_info
         )
         return self.repo.create_event(event)
 

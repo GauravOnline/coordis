@@ -6,7 +6,6 @@ This module handles the setup and configuration of the Discord bot.
 import discord
 from discord.ext import commands
 
-from commands.home_command import HomeworkCommand
 from commands.ping_command import PingCommand
 from core.registry import CommandRegistry
 from commands.help_command import HelpCommand
@@ -54,9 +53,6 @@ def setup_bot():
     ping_cmd = PingCommand()
     registry.register_command(ping_cmd)
 
-    # Register our help command
-    home_work = HomeworkCommand()
-    registry.register_command(home_work)
 
     event_cmd = EventCommand()
     registry.register_command(event_cmd)
@@ -76,9 +72,5 @@ def setup_bot():
     async def ping_command(ctx, role=None):
         await ping_cmd.execute(ctx, role)
         # Add ping command to bot
-
-    @bot.command(name='hw')
-    async def ping_command(ctx, role=None):
-        await home_work.execute(ctx, role)
 
     return bot
