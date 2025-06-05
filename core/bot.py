@@ -20,6 +20,19 @@ def setup_bot():
     Returns:
         discord.ext.commands.Bot: Configured bot instance
     """
+    # Global Variables
+    default_alarm = 0;
+    default_channel = "";
+
+    # Read Config File
+    with open("config.txt") as f:
+        for line in f:
+            print(line)
+            if line.casefold() == "default_alarm".casefold():
+                default_alarm = line
+            elif line.casefold() == "default_channel".casefold():
+                default_channel = line
+
     # Set up intents
     intents = discord.Intents.default()
     intents.message_content = True
