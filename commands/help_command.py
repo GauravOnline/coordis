@@ -1,6 +1,7 @@
 from commands.base import Command
 from core.registry import CommandRegistry
 from ui import help_ui  # <- import UI helpers
+from core.constants import USAGE_MESSAGE_DISPLAY_TIME
 
 
 class HelpCommand(Command):
@@ -17,12 +18,12 @@ class HelpCommand(Command):
         registry = CommandRegistry()
 
         if not role:
-            await ctx.send(help_ui.prompt_for_role())
+            await ctx.send(help_ui.prompt_for_role(), delete_after=USAGE_MESSAGE_DISPLAY_TIME)
             return
 
         role = role.lower()
         if role not in ["student", "teacher"]:
-            await ctx.send(help_ui.unknown_role_message())
+            await ctx.send(help_ui.unknown_role_message(), delete_after=USAGE_MESSAGE_DISPLAY_TIME)
             return
 
         commands = registry.get_commands_by_role(role)
