@@ -1,0 +1,2 @@
+Default_Alarm=3600
+Default_Channel=bot
