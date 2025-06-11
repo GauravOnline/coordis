@@ -7,7 +7,6 @@ from services.event_service import EventService
 from commands.base import Command
 from ui import event_ui
 
-
 async def alarm(channel):
     while True:
         await asyncio.sleep(bot.default_alarm_interval)
@@ -22,4 +21,3 @@ async def alarm(channel):
                         delta = event.date_due - datetime.now()
                         if delta.total_seconds() < bot.default_alarm:
                             await channel.send(event_ui.alarm_message(event), delete_after=ALARM_MESSAGE_DISPLAY_TIME)
-

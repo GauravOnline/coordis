@@ -18,7 +18,7 @@ default_alarm = 60  # Seconds before Due Date to Alert User
 default_alarm_interval = 60  # Seconds between each check for Due Events
 default_channel = ""
 
-async def setup_bot():
+def setup_bot():
     """
     Set up and configure the Discord bot.
 
@@ -80,7 +80,7 @@ async def setup_bot():
 
     @bot.event
     async def on_ready():
-        channel = discord.utils.get(client.get_all_channels(), name=default_channel)
+        channel = discord.utils.get(bot.get_all_channels(), name=default_channel)
         if channel:
             await alarm(channel)
         else:

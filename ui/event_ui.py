@@ -37,4 +37,5 @@ def unknown_action_message():
     return "Unknown action. Use add, list, or delete."
 
 def alarm_message(event):
-    return "Event Due!"
+    # TODO Seperate behaviour for private events
+    return "@here Event Alarm!" + "\n" + event.event_name + " is due at " + event.date_due + "."
