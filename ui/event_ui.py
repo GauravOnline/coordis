@@ -35,3 +35,6 @@ def delete_result_message(deleted):
 
 def unknown_action_message():
     return "Unknown action. Use add, list, or delete."
+
+def alarm_message(event):
+    return "Event Due!"
