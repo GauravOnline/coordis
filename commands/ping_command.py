@@ -1,7 +1,8 @@
 import discord
+
 from commands.base import Command
-from ui import ping_ui  # 👈 import the UI module
 from core.constants import FEEDBACK_MESSAGE_DISPLAY_TIME
+from ui import ping_ui  # 👈 import the UI module
 
 
 class PingCommand(Command):
@@ -11,7 +12,7 @@ class PingCommand(Command):
         super().__init__(
             name="ping",
             description="Check the bot's response time",
-            roles=["all", "student", "teacher"]
+            roles=["all", "student", "teacher"],
         )
 
     async def execute(self, ctx, *args):

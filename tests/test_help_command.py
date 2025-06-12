@@ -1,10 +1,11 @@
 import pytest
-from core.registry import CommandRegistry
-from commands.help_command import HelpCommand
+
 from commands.event_command import EventCommand
+from commands.help_command import HelpCommand
 from commands.ping_command import PingCommand
-from ui import help_ui
 from core.constants import USAGE_MESSAGE_DISPLAY_TIME
+from core.registry import CommandRegistry
+from ui import help_ui
 
 
 @pytest.fixture(autouse=True)
@@ -29,7 +30,9 @@ async def test_help_command_no_role(mock_ctx):
     """
     help_command = HelpCommand()
     await help_command.execute(mock_ctx, role="")
-    mock_ctx.send.assert_called_with(help_ui.prompt_for_role(), delete_after=USAGE_MESSAGE_DISPLAY_TIME)
+    mock_ctx.send.assert_called_with(
+        help_ui.prompt_for_role(), delete_after=USAGE_MESSAGE_DISPLAY_TIME
+    )
 
 
 @pytest.mark.asyncio
@@ -42,7 +45,9 @@ async def test_help_command_invalid_role(mock_ctx):
     """
     help_command = HelpCommand()
     await help_command.execute(mock_ctx, role="admin")
-    mock_ctx.send.assert_called_with(help_ui.unknown_role_message(), delete_after=USAGE_MESSAGE_DISPLAY_TIME)
+    mock_ctx.send.assert_called_with(
+        help_ui.unknown_role_message(), delete_after=USAGE_MESSAGE_DISPLAY_TIME
+    )
 
 
 @pytest.mark.asyncio
