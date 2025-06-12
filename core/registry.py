@@ -7,6 +7,7 @@ Singleton registry that maintains all available bot commands.
 
 class CommandRegistry:
     """Central registry for all bot commands"""
+
     _instance = None
 
     def __new__(cls):
