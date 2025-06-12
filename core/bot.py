@@ -19,7 +19,6 @@ from ui import event_ui
 default_alarm_margin = 60  # Seconds before Due Date to Alert User
 default_alarm_interval = 60  # Seconds between each check for Due Events
 default_channel = ""
-current_event_id = -1;
 
 def setup_bot():
     """
@@ -98,6 +97,8 @@ def setup_bot():
         if user == bot.user:
             return  # ignore bot's own reactions
         if reaction.emoji == '⏰' and reaction.message.content.startswith("@here Event Alarm!"):
+            lines = reaction.message.content.splitlines()
+            current_event_id = int(lines[-1].rstrip())
             with get_session() as session:
                 service = EventService(session)
                 off = service.event_alarm_off(current_event_id)

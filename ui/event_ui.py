@@ -39,8 +39,7 @@ def unknown_action_message():
 
 def alarm_message(event):
     # TODO Seperate behaviour for private events
-
-    return "@here Event Alarm!" + "\n" + event.event_name + " is due at " + event.date_due.strftime("%Y-%m-%d %H:%M:%S") + "." + "\n" + "React ⏰ to turn off this alarm."
+    return "@here Event Alarm!" + "\n" + event.event_name + " is due at " + event.date_due.strftime("%Y-%m-%d %H:%M:%S") + "." + "\n" + "React ⏰ to turn off alarm for event no." + "\n" + str(event.id)
 
 def alarm_off_message(off):
     return "Alarm Off." if off else "Alarm Off Error, Most likely event was not found."

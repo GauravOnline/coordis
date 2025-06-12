@@ -16,7 +16,7 @@ async def alarm(channel, alarm_margin, alarm_interval):
                 print("\nNo Events found.")
             else:
                 for event in events:
-                    if event.date_due:
+                    if event.date_due and not event.alarm_off:
                         print("\nEvent is due")
                         delta = event.date_due - datetime.now()
                         if 0 < delta.total_seconds() < alarm_margin:
