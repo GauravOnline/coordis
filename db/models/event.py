@@ -8,3 +8,4 @@ class Event(SQLModel, table=True):
     date_due: datetime
     date_assigned: datetime = Field(default_factory=datetime.utcnow)
     event_info: Optional[str] = None
+    alarm_off: Optional[bool] = False

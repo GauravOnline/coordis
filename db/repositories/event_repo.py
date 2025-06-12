@@ -29,3 +29,12 @@ class EventRepository:
             self.session.commit()
             return True
         return False
+
+    def event_alarm_off(self, event_id: int) -> bool:
+        event = self.get_event_by_id(event_id)
+        if event:
+            current_event_id = event_id
+            event.alarm_off = True
+            self.session.commit()
+            return True
+        return False

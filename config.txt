@@ -1,2 +1,3 @@
-Default_Alarm=5
+Default_Alarm_Margin=60
 Default_Channel=general
+Default_Alarm_Interval=10

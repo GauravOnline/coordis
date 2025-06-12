@@ -1,23 +1,24 @@
 import asyncio
-import core.bot as bot
 from datetime import datetime
 from core.constants import FEEDBACK_MESSAGE_DISPLAY_TIME, ALARM_MESSAGE_DISPLAY_TIME
 from db.base import get_session
 from services.event_service import EventService
-from commands.base import Command
 from ui import event_ui
 
-async def alarm(channel):
+async def alarm(channel, alarm_margin, alarm_interval):
     while True:
-        await asyncio.sleep(bot.default_alarm_interval)
+        await asyncio.sleep(alarm_interval)
         with get_session() as session:
+            print("\nChecking events for alarms")
             service = EventService(session)
             events = service.list_events()
             if not events:
-                await channel.send(event_ui.no_events_message(), delete_after=FEEDBACK_MESSAGE_DISPLAY_TIME)
+                print("\nNo Events found.")
             else:
                 for event in events:
                     if event.date_due:
+                        print("\nEvent is due")
                         delta = event.date_due - datetime.now()
-                        if delta.total_seconds() < bot.default_alarm:
-                            await channel.send(event_ui.alarm_message(event), delete_after=ALARM_MESSAGE_DISPLAY_TIME)
+                        if 0 < delta.total_seconds() < alarm_margin:
+                            sent = await channel.send(event_ui.alarm_message(event), delete_after=ALARM_MESSAGE_DISPLAY_TIME)
+                            await sent.add_reaction('⏰')
