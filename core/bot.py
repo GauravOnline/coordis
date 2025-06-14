@@ -89,14 +89,14 @@ def setup_bot():
         await ping_cmd.execute(ctx)
         # Add ping command to bot
 
-
     # Add role command to bot
     @bot.command(name='user')
     async def user_command(ctx, *args):
         print(f"args {args}")
         await user_cmd.execute(bot, ctx, args)
-        #Add role command for dot
-    
+
+
+    # Start Alarm Async Event once bot is in ready state
     @bot.event
     async def on_ready():
         channel = discord.utils.get(bot.get_all_channels(), name=default_channel)
@@ -104,16 +104,8 @@ def setup_bot():
             await alarm(channel, default_alarm_margin, default_alarm_interval)
         else:
             print(f"Channel '{default_channel}' not found.")
-
-                #await bot.invoke(user_cmd, bot, bot.event, "list") 
-        for guild in bot.guilds:
-            for channel in guild.text_channels:
-                print(f"\n\nname: {bot.get_channel(channel.id)} id: {channel.id}\n\n")
-                #ctx = await  bot.get_context(guild)
-                args = ['create']
-                await user_cmd.execute(bot, bot.get_channel(channel.id), args)
-
-@bot.event
+            
+    @bot.event
     async def on_ready():
         #await bot.invoke(user_cmd, bot, bot.event, "list") 
         for guild in bot.guilds:
