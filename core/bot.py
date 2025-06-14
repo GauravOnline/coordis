@@ -79,4 +79,45 @@ def setup_bot():
         await ping_cmd.execute(ctx)
         # Add ping command to bot
 
+<<<<<<< Updated upstream
     return bot
+=======
+    # Add role command to bot
+    @bot.command(name='user')
+    async def user_command(ctx, *args):
+        print(f"args {args}")
+        await user_cmd.execute(bot, ctx, args)
+        #Add role command for dot
+    
+    @bot.event
+    async def on_ready():
+        channel = discord.utils.get(bot.get_all_channels(), name=default_channel)
+        if channel:
+            await alarm(channel, default_alarm_margin, default_alarm_interval)
+        else:
+            print(f"Channel '{default_channel}' not found.")
+
+                #await bot.invoke(user_cmd, bot, bot.event, "list") 
+        for guild in bot.guilds:
+            for channel in guild.text_channels:
+                print(f"\n\nname: {bot.get_channel(channel.id)} id: {channel.id}\n\n")
+                #ctx = await  bot.get_context(guild)
+                args = ['create']
+                await user_cmd.execute(bot, bot.get_channel(channel.id), args)
+
+    # Set up reaction listener
+    @bot.event
+    async def on_reaction_add(reaction, user):
+        if user == bot.user:
+            return  # ignore bot's own reactions
+        # React to alarm messages with alarm clock react so users can react again with it
+        if reaction.emoji == '⏰' and reaction.message.content.startswith("@here Event Alarm!"):
+            lines = reaction.message.content.splitlines()
+            current_event_id = int(lines[-1].rstrip())
+            with get_session() as session:
+                service = EventService(session)
+                off = service.event_alarm_off(current_event_id)
+            await reaction.message.channel.send(event_ui.alarm_off_message(off))
+
+    return bot
+>>>>>>> Stashed changes
