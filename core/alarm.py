@@ -6,18 +6,18 @@ from services.event_service import EventService
 from ui import event_ui
 
 async def alarm(channel, alarm_margin, alarm_interval):
+    """Sets up an asynchronous alarm object which checks
+    the database for events, then checks if any events
+    are soon to be due. If time to due date is greater
+    than 0 and less than alarm_margin, then fire the alarm."""
     while True:
         await asyncio.sleep(alarm_interval)
         with get_session() as session:
-            print("\nChecking events for alarms")
             service = EventService(session)
             events = service.list_events()
-            if not events:
-                print("\nNo Events found.")
-            else:
+            if events:
                 for event in events:
                     if event.date_due and not event.alarm_off:
-                        print("\nEvent is due")
                         delta = event.date_due - datetime.now()
                         if 0 < delta.total_seconds() < alarm_margin:
                             sent = await channel.send(event_ui.alarm_message(event), delete_after=ALARM_MESSAGE_DISPLAY_TIME)

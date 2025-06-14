@@ -1,3 +1,3 @@
-Default_Alarm_Margin=300
+Default_Alarm_Margin=86400
 Default_Channel=general
-Default_Alarm_Interval=10
+Default_Alarm_Interval=3600

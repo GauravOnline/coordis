@@ -3,6 +3,9 @@
 ## Config File
 - Default_Alarm_Margin=\<time in seconds>  
 State how many seconds before the due date of an event the bot should make an alert.
+Notable times in seconds:
+	- 1 Hour: 3600
+	- 1 Day: 86400
 
 - Default_Alarm_Interval=\<time in seconds>  
 How often should the bot check the events for due events.

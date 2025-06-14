@@ -16,9 +16,9 @@ from services.event_service import EventService
 from ui import event_ui
 
 # Global Variables
-default_alarm_margin = 60  # Seconds before Due Date to Alert User
-default_alarm_interval = 60  # Seconds between each check for Due Events
-default_channel = ""
+default_alarm_margin = 60       # Seconds before Due Date to Alert User
+default_alarm_interval = 60     # Seconds between each check for Due Events
+default_channel = "general"     # Name of the default channel for alarms to ping in
 
 def setup_bot():
     """
@@ -92,10 +92,12 @@ def setup_bot():
         else:
             print(f"Channel '{default_channel}' not found.")
 
+    # Set up reaction listener
     @bot.event
     async def on_reaction_add(reaction, user):
         if user == bot.user:
             return  # ignore bot's own reactions
+        # React to alarm messages with alarm clock react so users can react again with it
         if reaction.emoji == '⏰' and reaction.message.content.startswith("@here Event Alarm!"):
             lines = reaction.message.content.splitlines()
             current_event_id = int(lines[-1].rstrip())

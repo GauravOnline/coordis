@@ -35,6 +35,5 @@ class EventRepository:
         if event:
             event.alarm_off = True
             self.session.commit()
-            print("Event alarm turned off")
             return True
         return False
