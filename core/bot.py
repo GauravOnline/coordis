@@ -10,7 +10,17 @@ from discord.ext import commands
 from core.registry import CommandRegistry
 from commands.help_command import HelpCommand
 from commands.event_command import EventCommand
+from commands.user_command import UserCommand
+from commands.ping_command import PingCommand
+from core.alarm import alarm
+from db.base import get_session
+from services.event_service import EventService
+from ui import event_ui
 
+# Global Variables
+default_alarm_margin = 60       # Seconds before Due Date to Alert User
+default_alarm_interval = 60     # Seconds between each check for Due Events
+default_channel = "general"     # Name of the default channel for alarms to ping in
 
 def setup_bot():
     """
@@ -79,9 +89,7 @@ def setup_bot():
         await ping_cmd.execute(ctx)
         # Add ping command to bot
 
-<<<<<<< Updated upstream
-    return bot
-=======
+
     # Add role command to bot
     @bot.command(name='user')
     async def user_command(ctx, *args):
@@ -105,6 +113,16 @@ def setup_bot():
                 args = ['create']
                 await user_cmd.execute(bot, bot.get_channel(channel.id), args)
 
+@bot.event
+    async def on_ready():
+        #await bot.invoke(user_cmd, bot, bot.event, "list") 
+        for guild in bot.guilds:
+            for channel in guild.text_channels:
+                print(f"\n\nname: {bot.get_channel(channel.id)} id: {channel.id}\n\n")
+                #ctx = await  bot.get_context(guild)
+                args = ['create']
+                await user_cmd.execute(bot, bot.get_channel(channel.id), args)
+
     # Set up reaction listener
     @bot.event
     async def on_reaction_add(reaction, user):
@@ -120,4 +138,4 @@ def setup_bot():
             await reaction.message.channel.send(event_ui.alarm_off_message(off))
 
     return bot
->>>>>>> Stashed changes
+
