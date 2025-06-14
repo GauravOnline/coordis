@@ -1,2 +1,3 @@
-Default_Alarm=3600
-Default_Channel=bot
+Default_Alarm_Margin=86400
+Default_Channel=general
+Default_Alarm_Interval=3600

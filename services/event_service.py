@@ -25,3 +25,6 @@ class EventService:
 
     def delete_event(self, event_id: int) -> bool:
         return self.repo.delete_event(event_id)
+
+    def event_alarm_off(self, event_id: int) -> bool:
+        return self.repo.event_alarm_off(event_id)

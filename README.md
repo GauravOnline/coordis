@@ -1,11 +1,14 @@
 # Coordis - A classroom chatbot
 
 ## Config File
-- Default_Alarm=\<time in seconds>  
-State how many milliseconds before the due date of an event the bot should make an alert.
-Notable times in milliseconds:
+- Default_Alarm_Margin=\<time in seconds>  
+State how many seconds before the due date of an event the bot should make an alert.
+Notable times in seconds:
 	- 1 Hour: 3600
 	- 1 Day: 86400
+
+- Default_Alarm_Interval=\<time in seconds>  
+How often should the bot check the events for due events.
 
 - Default_Channel=\<text name of channel>  
 Which channel the bot should post group_wide alerts and other non-response messages.
