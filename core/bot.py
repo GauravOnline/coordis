@@ -10,8 +10,7 @@ from discord.ext import commands
 from core.registry import CommandRegistry
 from commands.help_command import HelpCommand
 from commands.event_command import EventCommand
-from commands.user_command import UserCommand
-from commands.ping_command import PingCommand
+
 
 def setup_bot():
     """
@@ -20,6 +19,21 @@ def setup_bot():
     Returns:
         discord.ext.commands.Bot: Configured bot instance
     """
+
+    # Read Config File
+    with open("config.txt") as f:
+        for line in f:
+            print(line)
+            if line.casefold().startswith("default_alarm_margin".casefold()):
+                global default_alarm_margin
+                default_alarm_margin = int(line.split("=", 1)[1])
+            elif line.casefold().startswith("default_alarm_interval".casefold()):
+                global default_alarm_interval
+                default_alarm_interval = int(line.split("=", 1)[1].rstrip())
+            elif line.casefold().startswith("default_channel".casefold()):
+                global default_channel
+                default_channel = line.split("=", 1)[1].rstrip()
+
     # Set up intents
     intents = discord.Intents.default()
     intents.message_content = True
@@ -64,22 +78,5 @@ def setup_bot():
     async def ping_command(ctx):
         await ping_cmd.execute(ctx)
         # Add ping command to bot
-
-    # Add role command to bot
-    @bot.command(name='user')
-    async def user_command(ctx, *args):
-        print(f"args {args}")
-        await user_cmd.execute(bot, ctx, args)
-        #Add role command for dot
-    
-    @bot.event
-    async def on_ready():
-        #await bot.invoke(user_cmd, bot, bot.event, "list") 
-        for guild in bot.guilds:
-            for channel in guild.text_channels:
-                print(f"\n\nname: {bot.get_channel(channel.id)} id: {channel.id}\n\n")
-                #ctx = await  bot.get_context(guild)
-                args = ['create']
-                await user_cmd.execute(bot, bot.get_channel(channel.id), args)
 
     return bot
