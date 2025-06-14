@@ -21,5 +21,6 @@ if __name__ == "__main__":
     if not TOKEN:
         raise ValueError("No token found. Please create a .env file with your DISCORD_TOKEN")
 
+    
     # Run the bot
     bot.run(TOKEN)
