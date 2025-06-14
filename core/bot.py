@@ -6,10 +6,12 @@ This module handles the setup and configuration of the Discord bot.
 import discord
 from discord.ext import commands
 
-from commands.ping_command import PingCommand
+
 from core.registry import CommandRegistry
 from commands.help_command import HelpCommand
 from commands.event_command import EventCommand
+from commands.user_command import UserCommand
+from commands.ping_command import PingCommand
 from core.alarm import alarm
 from db.base import get_session
 from services.event_service import EventService
@@ -45,6 +47,7 @@ def setup_bot():
     # Set up intents
     intents = discord.Intents.default()
     intents.message_content = True
+    intents.members = True
 
     # Create bot instance
     bot = commands.Bot(command_prefix='!', intents=intents)
@@ -67,6 +70,9 @@ def setup_bot():
     event_cmd = EventCommand()
     registry.register_command(event_cmd)
 
+    user_cmd = UserCommand()
+    registry.register_command(user_cmd)
+
     # Add to bot
     @bot.command(name='event')
     async def event_command(ctx, *args):
@@ -74,14 +80,21 @@ def setup_bot():
 
     # Add help command to bot
     @bot.command(name='help')
-    async def help_command(ctx, role=None):
-        await help_cmd.execute(ctx, role)
+    async def help_command(ctx):
+        await help_cmd.execute(ctx)
 
     # Add ping command to bot
     @bot.command(name='ping')
-    async def ping_command(ctx, role=None):
-        await ping_cmd.execute(ctx, role)
+    async def ping_command(ctx):
+        await ping_cmd.execute(ctx)
         # Add ping command to bot
+
+    # Add role command to bot
+    @bot.command(name='user')
+    async def user_command(ctx, *args):
+        print(f"args {args}")
+        await user_cmd.execute(bot, ctx, args)
+
 
     # Start Alarm Async Event once bot is in ready state
     @bot.event
@@ -91,6 +104,16 @@ def setup_bot():
             await alarm(channel, default_alarm_margin, default_alarm_interval)
         else:
             print(f"Channel '{default_channel}' not found.")
+            
+    @bot.event
+    async def on_ready():
+        #await bot.invoke(user_cmd, bot, bot.event, "list") 
+        for guild in bot.guilds:
+            for channel in guild.text_channels:
+                print(f"\n\nname: {bot.get_channel(channel.id)} id: {channel.id}\n\n")
+                #ctx = await  bot.get_context(guild)
+                args = ['create']
+                await user_cmd.execute(bot, bot.get_channel(channel.id), args)
 
     # Set up reaction listener
     @bot.event
@@ -107,3 +130,4 @@ def setup_bot():
             await reaction.message.channel.send(event_ui.alarm_off_message(off))
 
     return bot
+

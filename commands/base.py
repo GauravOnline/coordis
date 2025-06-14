@@ -1,3 +1,5 @@
+from services.user_service import UserService
+from db.base import get_session
 """
 Base Command Interface
 
@@ -22,6 +24,7 @@ class Command:
         self.roles = roles  # List of roles that can use this command
 
     async def execute(self, ctx, *args):
+        
         """
         Execute the command logic.
 
@@ -41,3 +44,26 @@ class Command:
             str: Help text describing the command usage
         """
         return f"!{self.name} - {self.description}"
+    
+    def check_permission_role(self,ctx):
+        with get_session() as session:
+            service = UserService(session)
+
+
+            # get user permisssion level of command operator
+            try:
+                j = 0
+                messenger = service.get_user(ctx.author.name)
+                for role in self.roles:
+                    print (f"\n\nrole: {role}\n{self.roles}\n\n")
+                    if messenger.user_role != role:
+                        print(f"self.roles: {role}  user role: {messenger.user_role}")
+                    else:
+                        j=1
+                        print(f"self.roles: {role}  user role: {messenger.user_role}")
+                #if j == 0:
+                    #await ctx.send(user_ui.permission_too_low_message(ctx.author.name))
+                    
+                return j
+            except AttributeError:
+                print("AttributeError")
