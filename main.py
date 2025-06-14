@@ -16,6 +16,7 @@ if __name__ == "__main__":
     # Create and set up the bot
     bot = setup_bot()
 
+
     # Get the token from the environment variable
     TOKEN = os.getenv('DISCORD_TOKEN')
     if not TOKEN:

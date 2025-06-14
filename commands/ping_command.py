@@ -15,6 +15,11 @@ class PingCommand(Command):
         )
 
     async def execute(self, ctx, *args):
+
+        if (PingCommand.check_permission_role(self,ctx) == 0):
+            await ctx.send(ping_ui.permission_too_low_message(ctx.author.name), delete_after=FEEDBACK_MESSAGE_DISPLAY_TIME)
+            return
+
         latency = round(ctx.bot.latency * 1000)
         print("inside the ping command")
 
