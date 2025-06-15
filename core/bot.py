@@ -78,11 +78,6 @@ def setup_bot():
     async def event_command(ctx, *args):
         await event_cmd.execute(ctx, args)
 
-    # Add help command to bot
-    @bot.command(name='help')
-    async def help_command(ctx):
-        await help_cmd.execute(ctx)
-
     # Add ping command to bot
     @bot.command(name='ping')
     async def ping_command(ctx):
@@ -96,15 +91,14 @@ def setup_bot():
         await user_cmd.execute(bot, ctx, args)
 
 
+    # Add help command to bot
+    @bot.command(name='help')
+    async def help_command(ctx):
+        await help_cmd.execute(ctx)
+
+
+
     # Start Alarm Async Event once bot is in ready state
-    @bot.event
-    async def on_ready():
-        channel = discord.utils.get(bot.get_all_channels(), name=default_channel)
-        if channel:
-            await alarm(channel, default_alarm_margin, default_alarm_interval)
-        else:
-            print(f"Channel '{default_channel}' not found.")
-            
     @bot.event
     async def on_ready():
         #await bot.invoke(user_cmd, bot, bot.event, "list") 
@@ -114,6 +108,14 @@ def setup_bot():
                 #ctx = await  bot.get_context(guild)
                 args = ['create']
                 await user_cmd.execute(bot, bot.get_channel(channel.id), args)
+
+        channel = discord.utils.get(bot.get_all_channels(), name=default_channel)
+        if channel:
+            await alarm(channel, default_alarm_margin, default_alarm_interval)
+        else:
+            print(f"Channel '{default_channel}' not found.")
+
+
 
     # Set up reaction listener
     @bot.event
