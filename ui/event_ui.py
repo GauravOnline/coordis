@@ -17,6 +17,8 @@ def event_added_message(event):
 def no_events_message():
     return "No events found."
 
+def permission_too_low_message(name):
+    return f"please check permissions level \"{name}\" does not have correct permissions to use this command"
 
 def events_list_message(events):
     return "📅 Events:\n" + "\n".join(
