@@ -8,7 +8,6 @@ from discord.ext import commands
 
 
 from core.registry import CommandRegistry
-from commands.help_command import HelpCommand
 from commands.event_command import EventCommand
 from commands.user_command import UserCommand
 from commands.ping_command import PingCommand
@@ -29,6 +28,7 @@ def setup_bot():
     Returns:
         discord.ext.commands.Bot: Configured bot instance
     """
+    from commands.help_command import HelpCommand
 
     # Read Config File
     with open("config.txt") as f:
