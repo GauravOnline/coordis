@@ -1,8 +1,11 @@
 import discord
 
+
+#shouldnt activate
 def prompt_for_role():
     return "Please specify your role: `!help student` or `!help teacher`"
 
+#shouldnt be implemented unless user not added to class
 def unknown_role_message():
     return "Unknown role. Please use `!help student` or `!help teacher`"
 

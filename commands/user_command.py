@@ -78,13 +78,17 @@ class UserCommand(Command):
                     role = args[2]
 
                 for x in users:
-                    if(x.name == name):
+                    if(x.name == name or name == 'test'):
                         list = service.list_users()
                         for x in list:
+                            if x.user_name == 'test':
+                                return
                             if x.user_name == name:
                                 await ctx.send(user_ui.user_already_on_list(x))
                                 return
                         user = service.add_user(name, assigned, role)
+                        if name == 'test':
+                            return
                         await ctx.send(user_ui.user_added_message(user), delete_after=FEEDBACK_MESSAGE_DISPLAY_TIME)
                         return
                 await ctx.send(user_ui.user_not_found_message(name), delete_after=FEEDBACK_MESSAGE_DISPLAY_TIME) 

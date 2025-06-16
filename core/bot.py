@@ -48,6 +48,7 @@ def setup_bot():
     intents = discord.Intents.default()
     intents.message_content = True
     intents.members = True
+    intents.reactions = True
 
     # Create bot instance
     bot = commands.Bot(command_prefix='!', intents=intents)
@@ -107,7 +108,10 @@ def setup_bot():
                 print(f"\n\nname: {bot.get_channel(channel.id)} id: {channel.id}\n\n")
                 #ctx = await  bot.get_context(guild)
                 args = ['create']
+                test_args = ['add','test','teacher']
                 await user_cmd.execute(bot, bot.get_channel(channel.id), args)
+                await user_cmd.execute(bot,bot.get_channel(channel.id),test_args)
+
 
         channel = discord.utils.get(bot.get_all_channels(), name=default_channel)
         if channel:

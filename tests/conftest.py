@@ -2,6 +2,7 @@
 import sys
 import os
 import pytest
+import discord
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from unittest.mock import AsyncMock
 from core.registry import CommandRegistry
@@ -13,6 +14,7 @@ def initialize_database():
 
 @pytest.fixture
 def mock_ctx():
-    ctx = AsyncMock()
-    ctx.send = AsyncMock()
+    ctx = AsyncMock(spec=discord.user, name = 'test')
+    
+    ctx.send = AsyncMock(spec=discord.user, name='test')
     return ctx

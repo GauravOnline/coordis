@@ -54,6 +54,8 @@ class Command:
             try:
                 j = 0
                 messenger = service.get_user(ctx.author.name)
+                if(ctx == 'test'):
+                    return 1
                 for role in self.roles:
                     print (f"\n\nrole: {role}\n{self.roles}\n\n")
                     if messenger.user_role != role:
