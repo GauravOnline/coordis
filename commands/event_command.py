@@ -3,22 +3,28 @@ from services.event_service import EventService
 from db.base import get_session
 from datetime import datetime
 from ui import event_ui
-from core.constants import USAGE_MESSAGE_DISPLAY_TIME, FEEDBACK_MESSAGE_DISPLAY_TIME
+from core.constants import USAGE_MESSAGE_DISPLAY_TIME, FEEDBACK_MESSAGE_DISPLAY_TIME, ERROR_MESSAGE_DISPLAY_TIME
 
 
 class EventCommand(Command):
     def __init__(self):
         super().__init__(name="event", description="Manage events",
-                         roles=["all", "student", "teacher"])
+                         roles=["student", "teacher"])
 
     async def execute(self, ctx, *args):
         if not args:
             await ctx.send(event_ui.usage_message(), delete_after=USAGE_MESSAGE_DISPLAY_TIME)
             return
-
-        args = args[0]
-        action = args[0].lower()
-
+        try:
+            args = args[0]
+            action = args[0].lower()
+        except IndexError:
+            await ctx.send(event_ui.usage_message(), delete_after=USAGE_MESSAGE_DISPLAY_TIME)
+            return
+        if (EventCommand.check_permission_role(self,ctx) == 0):
+                print("\n\nits a 0\n\n")
+                await ctx.send(event_ui.permission_too_low_message(ctx.author.name), delete_after=FEEDBACK_MESSAGE_DISPLAY_TIME)
+                return
         with get_session() as session:
             service = EventService(session)
 
@@ -34,7 +40,7 @@ class EventCommand(Command):
                     event = service.create_event(name, assigned, due, info)
                     await ctx.send(event_ui.event_added_message(event), delete_after=FEEDBACK_MESSAGE_DISPLAY_TIME)
                 except ValueError:
-                    await ctx.send(event_ui.invalid_date_message(), delete_after=USAGE_MESSAGE_DISPLAY_TIME)
+                    await ctx.send(event_ui.invalid_date_message(), delete_after=ERROR_MESSAGE_DISPLAY_TIME)
 
             elif action == "list":
                 events = service.list_events()

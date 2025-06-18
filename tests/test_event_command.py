@@ -5,7 +5,7 @@ from commands.event_command import EventCommand
 from db.models.event import Event
 from ui import event_ui
 from types import SimpleNamespace
-from core.constants import USAGE_MESSAGE_DISPLAY_TIME, FEEDBACK_MESSAGE_DISPLAY_TIME
+from core.constants import USAGE_MESSAGE_DISPLAY_TIME, FEEDBACK_MESSAGE_DISPLAY_TIME, ERROR_MESSAGE_DISPLAY_TIME
 
 
 @pytest.mark.asyncio
@@ -20,7 +20,6 @@ async def test_event_command_complete_usage(mock_ctx):
     event_name = "Midterm"
     due_time = datetime.now().isoformat()
     mock_event = SimpleNamespace(event_name=event_name)
-
     # add event
     await event_command.execute(mock_ctx, ["add", event_name, due_time])
     mock_ctx.send.assert_called_with(event_ui.event_added_message(mock_event), delete_after=FEEDBACK_MESSAGE_DISPLAY_TIME)
@@ -68,7 +67,7 @@ async def test_event_command_add_invalid_date(mock_ctx):
     """
     event_command = EventCommand()
     await event_command.execute(mock_ctx, ["add", "TestEvent", "beautiful-day"])
-    mock_ctx.send.assert_called_with(event_ui.invalid_date_message(), delete_after=USAGE_MESSAGE_DISPLAY_TIME)
+    mock_ctx.send.assert_called_with(event_ui.invalid_date_message(), delete_after=ERROR_MESSAGE_DISPLAY_TIME)
 
 
 @pytest.mark.asyncio
