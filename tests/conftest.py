@@ -6,16 +6,18 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from unittest.mock import AsyncMock, MagicMock
 from db.base import init_db
 
+
+# Automatically initialize database once per test session
 @pytest.fixture(scope="session", autouse=True)
 def initialize_database():
     init_db()
 
+# Provides a mocked Discord context (ctx)
 @pytest.fixture
 def mock_ctx():
     ctx = AsyncMock()
-    # Create a mock author with a name and assign to ctx.author
-    mock_author = MagicMock()
-    mock_author.name = "test_user"
-    ctx.author = mock_author
     ctx.send = AsyncMock()
+    ctx.author = MagicMock()
+    ctx.author.name = "test_user"
+    ctx.guild = None
     return ctx
